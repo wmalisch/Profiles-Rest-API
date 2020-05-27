@@ -2,8 +2,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
 
 from profiles_api import serializers
+from profiles_api import models
+from profiles_api import permissions
 
 class HelloApiView(APIView):
     """Test API View"""
@@ -92,3 +95,12 @@ class HelloViewSet(viewsets.ViewSet):
         """Removing an object"""
         return Response({'http_method':'DELETE'})
 
+# Inheriting from viewsets.ModelViewSet provides list() retrieve()
+# create() update() partial_update() and destroy() actions out of the box
+# Details can be docs here https://www.django-rest-framework.org/api-guide/viewsets/#modelviewset
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handle creating and updating profiles"""
+    serializer_class = serializers.UserProfileSerializer
+    queryset = models.UserProfile.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.UpdateOwnProfile,)
