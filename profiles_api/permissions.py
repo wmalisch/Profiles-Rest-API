@@ -23,3 +23,6 @@ class UpdateOwnStatus(permissions.BasePermission):
         # Check if user is trying to update (not safe methods), put patch or delete, then check they are the right user
         else:
             return obj.user_profile.id == request.user.id
+
+
+            
